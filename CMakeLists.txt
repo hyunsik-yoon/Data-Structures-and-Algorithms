@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
 
-set(DSA_TEST_FILES "src/73-MergeSort.test.cpp")
-set(DSA_SRC_FILES "src/73-MergeSort.cpp")
+set(DSA_TEST_FILES "src/73-MergeSortedArrays.test.cpp")
+set(DSA_SRC_FILES "src/73-MergeSortedArrays.cpp")
 
 option(BUILD_TEST "Build gtest" ON)
 
