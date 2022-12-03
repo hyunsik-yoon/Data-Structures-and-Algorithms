@@ -3,16 +3,17 @@ cmake_policy(SET CMP0048 NEW)
 project(DSA_PROJECT VERSION 0.1.0)
 
 cmake_minimum_required(VERSION 3.14)
+option(BUILD_TEST "Build gtest" ON)
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
 
-set(DSA_TEST_FILES "src/73-MergeSortedArrays.test.cpp")
-set(DSA_SRC_FILES "src/73-MergeSortedArrays.cpp")
+file(GLOB DSA_TEST_FILES src/*.test.cpp)
 
-option(BUILD_TEST "Build gtest" ON)
+file(GLOB DSA_SRC_FILES src/*.cpp)
+list(REMOVE_ITEM DSA_SRC_FILES ${DSA_TEST_FILES})
 
 add_library(dsa_lib STATIC ${DSA_SRC_FILES})
 target_include_directories(dsa_lib PUBLIC "include")
