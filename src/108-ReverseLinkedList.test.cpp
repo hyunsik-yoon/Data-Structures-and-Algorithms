@@ -6,7 +6,7 @@ TEST(Reverse_Linked_List_test, empty)
 {
     using namespace n108;
 
-    LinkedList l;
+    ds::LinkedList l;
 
     reverse(&l);
 
@@ -18,8 +18,8 @@ TEST(Reverse_Linked_List_test, one_node)
 {
     using namespace n108;
 
-    LinkedList l;
-    Node node(1);
+    ds::LinkedList l;
+    ds::Node node(1);
 
     l.head(&node);
     l.tail(&node);
@@ -34,10 +34,10 @@ TEST(Reverse_Linked_List_test, three_node)
 {
     using namespace n108;
 
-    LinkedList l;
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
+    ds::LinkedList l;
+    ds::Node node1(1);
+    ds::Node node2(2);
+    ds::Node node3(3);
 
     node1.next(&node2);
     node2.next(&node3);

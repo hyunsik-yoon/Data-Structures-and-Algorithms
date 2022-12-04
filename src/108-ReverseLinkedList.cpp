@@ -3,15 +3,15 @@
 namespace n108
 {
 
-void reverse(LinkedList* l)
+void reverse(ds::LinkedList* l)
 {
     if (l == nullptr || l->head() == nullptr) 
     {
         return;
     }
 
-    Node* evantual_tail = l->head();
-    Node* new_head = l->head()->next();
+    ds::Node* evantual_tail = l->head();
+    ds::Node* new_head = l->head()->next();
 
     while (new_head != nullptr)
     {
