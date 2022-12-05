@@ -6,7 +6,7 @@
 namespace n108 
 {
 
-void reverse(ds::LinkedList* l);
+void reverse(ds::LinkedList<int>* l);
 
 } // namespace n108
 

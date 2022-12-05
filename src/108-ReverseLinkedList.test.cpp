@@ -6,7 +6,7 @@ TEST(Reverse_Linked_List_test, empty)
 {
     using namespace n108;
 
-    ds::LinkedList l;
+    ds::LinkedList<int> l;
 
     reverse(&l);
 
@@ -18,39 +18,28 @@ TEST(Reverse_Linked_List_test, one_node)
 {
     using namespace n108;
 
-    ds::LinkedList l;
-    ds::Node node(1);
+    ds::LinkedList<int> l;
 
-    l.head(&node);
-    l.tail(&node);
+    l.append(1);
 
     reverse(&l);
 
-    ASSERT_EQ(l.head(), &node);
-    ASSERT_EQ(l.tail(), &node);
+    ASSERT_EQ(l.head(), l.tail());
 }
 
 TEST(Reverse_Linked_List_test, three_node)
 {
     using namespace n108;
 
-    ds::LinkedList l;
-    ds::Node node1(1);
-    ds::Node node2(2);
-    ds::Node node3(3);
-
-    node1.next(&node2);
-    node2.next(&node3);
-
-    l.head(&node1);
-    l.tail(&node3);
+    ds::LinkedList<int> l;
+    l.append(1);
+    l.append(2);
+    l.append(3);
 
     reverse(&l);
 
-    ASSERT_EQ(l.head(), &node3);
-    ASSERT_EQ(l.tail(), &node1);
-
-    ASSERT_EQ(node3.next(), &node2);
-    ASSERT_EQ(node2.next(), &node1);
-    ASSERT_EQ(node1.next(), nullptr);
+    ASSERT_EQ(l.head()->val(), 3);
+    ASSERT_EQ(l.head()->next()->val(), 2);
+    ASSERT_EQ(l.head()->next()->next()->val(), 1);
+    ASSERT_EQ(l.head()->next()->next(), l.tail());
 }
