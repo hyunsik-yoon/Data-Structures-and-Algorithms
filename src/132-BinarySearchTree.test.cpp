@@ -2,10 +2,44 @@
 
 #include <gtest/gtest.h>
 #include <algorithm>
+#include <iostream>
 
 namespace debug
 {
 using namespace n132;
+
+template <typename T>
+bool is_valid(Node<T> *r)
+{
+    if (r == nullptr)
+    {
+        return true;
+    }
+
+    if (r->left() != nullptr)
+    {
+        if (not (r->val() > r->left()->val()))
+        {
+            return false;
+        }
+    }
+
+    if (r->right() != nullptr)
+    {
+        if (not (r->val() < r->right()->val()))
+        {
+            return false;
+        }
+    }
+
+    return is_valid(r->left()) && is_valid(r->right());
+}
+
+template <typename T>
+bool is_valid(BinarySearchTree<T> &bst)
+{
+    return is_valid(bst.root());
+}
 
 template <typename T>
 inline void dump_dfs(Node<T> *root, std::vector<T> &v, T nullptr_marker)
@@ -56,10 +90,12 @@ TEST(binary_search_tree, empty)
     ASSERT_EQ(bst.is_empty(), true);
 }
 
-TEST(binary_search_tree, insert_1)
+TEST(binary_search_tree, insert_lookup_1)
 {
     using namespace n132;
     BinarySearchTree<int> bst;
+
+    ASSERT_FALSE(bst.lookup(100));
 
     int N =  -1; // nullptr_marker
     {
@@ -73,6 +109,9 @@ TEST(binary_search_tree, insert_1)
              N, N
         };
         ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+
+        ASSERT_TRUE(bst.lookup(100) != nullptr);
+        ASSERT_TRUE(bst.lookup(12345) == nullptr);
     }
     {
         bst.insert(50);
@@ -86,6 +125,10 @@ TEST(binary_search_tree, insert_1)
                    N
         };
         ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+
+        ASSERT_TRUE(bst.lookup(50) != nullptr);
+        ASSERT_TRUE(bst.lookup(100) != nullptr);
+        ASSERT_TRUE(bst.lookup(12345) == nullptr);
     }
     {
         bst.insert(180);
@@ -100,5 +143,65 @@ TEST(binary_search_tree, insert_1)
                   N,  N
         };
         ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+
+        ASSERT_TRUE(bst.lookup(180) != nullptr);
+        ASSERT_TRUE(bst.lookup(12345) == nullptr);
     }
+    {
+        bst.insert(75);
+
+        auto actual = debug::dump(bst, N);
+
+        std::vector<int> expected = {
+               100,
+            50,
+          N,  75,
+             N, N,
+                    180,
+                   N,  N
+        };
+        ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+
+        ASSERT_TRUE(bst.lookup(50) != nullptr);
+        ASSERT_TRUE(bst.lookup(75) != nullptr);
+        ASSERT_TRUE(bst.lookup(100) != nullptr);
+        ASSERT_TRUE(bst.lookup(180) != nullptr);
+        ASSERT_TRUE(bst.lookup(12345) == nullptr);
+    }
+}
+
+TEST(binary_search_tree, lookup_2)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    //     100
+    //   50   150
+    // 20
+    bst.insert(100);
+    bst.insert(50);
+    bst.insert(150);
+    bst.insert(20);
+
+    Node<int> **pr = nullptr;
+    Node<int> *r = bst.lookup(20, pr);
+
+    *pr = nullptr; // left node of val 150 is not nullptr
+    delete r;  // remove node of val 20
+
+    // now bst is
+    //     100
+    //   50   150
+
+    int N =  -1; // nullptr_marker
+    auto actual = debug::dump(bst, N);
+
+    std::vector<int> expected = {
+            100,
+         50,
+        N,  N,
+                150,
+                N,  N
+    };
+    ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
 }
