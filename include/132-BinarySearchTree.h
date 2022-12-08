@@ -29,7 +29,24 @@ template <typename T> class BinarySearchTree
 {
 public:
     BinarySearchTree() { _root = nullptr; }
+    ~BinarySearchTree() { delete_tree(root()); }
 
+private:
+    void delete_tree(Node<T> *r)
+    {
+        if (r == nullptr)
+        {
+            return;
+        }
+        else
+        {
+            delete_tree(r->left());
+            delete_tree(r->right());
+            delete r;
+        }
+    }
+
+public:
     void insert(const T &item)
     {
         if (is_empty())
@@ -70,6 +87,38 @@ public:
                 }
             }
         }
+    }
+
+    // Assume that lookup(..) returns a node *r.
+    // When r == root(), *prev_node is nullptr;
+    // when r != root(), *prev_node is upper level node of r;
+    Node<T> *lookup(const T &item, Node<T> **&prev_node)
+    {
+        for (auto r = _root; r != nullptr; )
+        {
+            if (r->val() == item)
+            {
+                return r;
+            }
+            else if (item < r->val())
+            {
+                prev_node = &(r->left());
+                r = r->left();
+            }
+            else if (item > r->val())
+            {
+                prev_node = &(r->right());
+                r = r->right();
+            }
+        }
+        return nullptr;
+    }
+
+    Node<T> *lookup(const T &item)
+    {
+        Node<T> **prev_node = nullptr;
+        // let's ignore prev_node in case of this method
+        return lookup(item, prev_node);
     }
 
     const T remove(const T &item)
