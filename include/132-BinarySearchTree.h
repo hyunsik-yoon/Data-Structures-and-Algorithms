@@ -1,6 +1,7 @@
 #ifndef __132__BINARY_SEARCH_TREE__
 #define __132__BINARY_SEARCH_TREE__
 
+#include <cassert>
 #include <stdexcept>
 #include <vector>
 
@@ -89,10 +90,48 @@ public:
         }
     }
 
+    // This returns a smallest number in the right tree of node r
+    // r must have right tree
+    // *ptr is upper level node of smallest node
+    Node<T> *smallest_of_right_tree(Node<T> *r, Node<T> **&ptr)
+    {
+        assert(r->right());
+
+        ptr = &(r->right());
+        r = r->right();
+
+        while (r->left() != nullptr)
+        {
+            ptr = &(r->left());
+            r = r->left();
+        }
+
+        return r;
+    }
+
+    // This returns a largest number in the left tree of node r
+    // r must have left tree
+    // *ptr is _left of upper level node of largest node
+    Node<T> *largest_of_left_tree(Node<T> *r, Node<T> **&ptr)
+    {
+        assert(r->left());
+
+        ptr = &(r->left());
+        r = r->left();
+
+        while (r->right() != nullptr)
+        {
+            ptr = &(r->right());
+            r = r->right();
+        }
+
+        return r;
+    }
+
     // Assume that lookup(..) returns a node *r.
-    // When r == root(), *prev_node is nullptr;
-    // when r != root(), *prev_node is upper level node of r;
-    Node<T> *lookup(const T &item, Node<T> **&prev_node)
+    // When r == root(), *ptr is nullptr;
+    // when r != root(), *ptr is pointer or _left or _right of upper level node of r;
+    Node<T> *lookup(const T &item, Node<T> **&ptr)
     {
         for (auto r = _root; r != nullptr; )
         {
@@ -102,12 +141,12 @@ public:
             }
             else if (item < r->val())
             {
-                prev_node = &(r->left());
+                ptr = &(r->left());
                 r = r->left();
             }
             else if (item > r->val())
             {
-                prev_node = &(r->right());
+                ptr = &(r->right());
                 r = r->right();
             }
         }
@@ -116,14 +155,72 @@ public:
 
     Node<T> *lookup(const T &item)
     {
-        Node<T> **prev_node = nullptr;
-        // let's ignore prev_node in case of this method
-        return lookup(item, prev_node);
+        Node<T> **ptr = nullptr;
+        // let's ignore ptr in case of this method
+        return lookup(item, ptr);
     }
 
-    const T remove(const T &item)
+    bool remove(const T &item)
     {
-        throw std::runtime_error("Not yet implemented");
+        Node<T> **p_removee = nullptr;
+        auto removee = lookup(item, p_removee);
+
+        if (removee == nullptr)
+        {
+            return false;
+        }
+
+        Node<T> *replacer = nullptr;    // This will replace removee after removal
+
+        // if removee has right(), replace removee with the smallest node of right tree
+        // if removee does not have right(), replace removee with the largest node of left tree
+        if (removee->right())
+        {
+            Node<T> **s_ptr = nullptr;
+            replacer = smallest_of_right_tree(removee, s_ptr);
+
+            // remove link in a tree to the smallest node
+            *s_ptr = nullptr;
+
+            // replace removee with smallest node
+            replacer->right() = removee->right();
+            replacer->left() = removee->left();
+
+            // remove removee
+            delete removee;
+        }
+        else if (removee->left()) // node has left tree only (no right tree)
+        {
+            Node<T> **l_ptr = nullptr;
+            replacer = largest_of_left_tree(removee, l_ptr);
+
+            // remove link in a tree to the smallest node
+            *l_ptr = nullptr;
+
+            // replace removee with smallest node
+            replacer->right() = removee->right();
+            replacer->left() = removee->left();
+
+            // remove removee
+            delete removee;
+        }
+        else // no left or right tree
+        {
+            // remove removee
+            delete removee;
+        }
+
+        if (removee == root())
+        {
+            _root = replacer;
+        }
+        else
+        {
+            // ptr to removee should be updated to point replacer
+            *p_removee = replacer;
+        }
+
+        return true;
     }
 
     bool is_empty()
