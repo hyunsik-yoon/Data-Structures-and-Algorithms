@@ -205,3 +205,137 @@ TEST(binary_search_tree, lookup_2)
     };
     ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
 }
+
+TEST(binary_search_tree, remove_against_empty_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    ASSERT_EQ(bst.remove(12345), false);
+}
+
+TEST(binary_search_tree, remove_root_only_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    bst.insert(100);
+
+    ASSERT_EQ(bst.remove(100), true);
+    ASSERT_EQ(bst.is_empty(), true);
+}
+
+TEST(binary_search_tree, remove_root_in_left_only_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    bst.insert(100);  // this will be removed
+    bst.insert(50);
+    bst.insert(70); // this will be a new node
+
+    ASSERT_EQ(bst.remove(100), true);
+
+    int N =  -1; // nullptr_marker
+    auto actual = debug::dump(bst, N);
+
+    std::vector<int> expected = {
+             70,
+         50,
+        N,  N,
+                 N
+    };
+    ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+}
+
+TEST(binary_search_tree, remove_root_in_complex_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    /*           100
+        50                  200
+                        150     250
+    */
+
+    bst.insert(100);    // will be removed
+    bst.insert(50);
+    bst.insert(200);
+    bst.insert(150);    // this will be a new root
+    bst.insert(250);
+
+    ASSERT_EQ(bst.remove(100), true);
+
+    int N =  -1; // nullptr_marker
+    auto actual = debug::dump(bst, N);
+
+    std::vector<int> expected = {
+             150,
+         50,
+        N,  N,
+                   200,
+                 N,   250,
+                     N,  N
+    };
+    ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+}
+
+TEST(binary_search_tree, remove_node_with_left_only_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    /*          200
+           100
+        50
+    */
+    bst.insert(200);
+    bst.insert(100);  // this will be removed
+    bst.insert(50); // this will replace 100
+
+    ASSERT_EQ(bst.remove(100), true);
+
+    int N =  -1; // nullptr_marker
+    auto actual = debug::dump(bst, N);
+
+    std::vector<int> expected = {
+              200,
+         50,
+        N,  N,
+                    N
+    };
+    ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+}
+
+TEST(binary_search_tree, remove_node_in_complex_tree)
+{
+    using namespace n132;
+    BinarySearchTree<int> bst;
+
+    /*           100
+        50                  200
+                        150     250
+    */
+
+    bst.insert(100);
+    bst.insert(50);
+    bst.insert(200);    // this will be removed
+    bst.insert(150);
+    bst.insert(250);    // this will be a new root
+
+    ASSERT_EQ(bst.remove(200), true);
+
+    int N =  -1; // nullptr_marker
+    auto actual = debug::dump(bst, N);
+
+    std::vector<int> expected = {
+             100,
+         50,
+       N,   N,
+                   250,
+                150,
+               N,  N,
+                       N
+    };
+    ASSERT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin()));
+}
