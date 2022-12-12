@@ -143,6 +143,6 @@ private:
 // Write class for
 // template <typename T> class BinaryHeap<BHType::MIN, T>
 
-} // __139__BINARY_HEAP__
+} // namespace n139
 
 #endif
