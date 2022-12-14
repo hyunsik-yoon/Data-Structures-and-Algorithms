@@ -3,19 +3,19 @@
 namespace
 {
 
-void reverse(std::string &src, uint32_t start, uint32_t end, std::string &dest, uint32_t dest_ind)
+void reverse(std::string &src, uint32_t src_start, uint32_t src_end, std::string &dest, uint32_t dest_ind)
 {
-    dest[dest_ind] = src[end];
+    dest[dest_ind] = src[src_end];
 
-    if (start == end)
+    if (src_start == src_end)
     {
         return;
     }
 
-    reverse(src, start, end - 1, dest, dest_ind + 1);
+    reverse(src, src_start, src_end - 1, dest, dest_ind + 1);
 }
 
-} // namespace n163
+} // namespace
 
 
 namespace n163
