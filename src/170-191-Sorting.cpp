@@ -92,7 +92,7 @@ template <typename T> const std::vector<T> merge(const std::vector<T> &left, con
     uint32_t r = 0;  // for index of right vector
     uint32_t v = 0;  // for index of returned vector
 
-    while (true)
+    while (l < left.size() && r < right.size())
     {
         if (left[l] < right[r])
         {
@@ -106,26 +106,15 @@ template <typename T> const std::vector<T> merge(const std::vector<T> &left, con
             r++;
             v++;
         }
-
-        if (l == left.size())
-        {
-            // copy rest of right
-            for (auto i = r; i < right.size(); i++, v++)
-            {
-                vec[v] = right[i];
-            }
-            break;
-        }
-        if (r == right.size())
-        {
-            // copy rest of left
-            for (auto i = l; i < left.size(); i++, v++)
-            {
-                vec[v] = left[i];
-            }
-            break;
-        }
     }
+
+    // copy leftover from left to the end of vec
+    std::copy(left.begin() + l, left.end(), vec.begin() + v);
+    uint32_t l_copied_count = left.size() - l;
+
+    // copy leftover from right to the end of vec
+    std::copy(right.begin() + r, right.end(), vec.begin() + v + l_copied_count);
+
     return vec;
 }
 
