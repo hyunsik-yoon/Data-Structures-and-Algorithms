@@ -32,7 +32,24 @@ template <typename T> void bubble_sort(std::vector<T> &v)
     }
 }
 
+template <typename T> void selection_sort(std::vector<T> &v)
+{
+    for (size_t start = 0; start < v.size(); start++)
+    {
+        T min_idx = start;
+        for (size_t n = start + 1; n < v.size(); n++)
+        {
+            if (v[n] < v[min_idx])
+            {
+                min_idx = n;
+            }
+        }
+        swap(v[start], v[min_idx]);
+    }
+}
+
 // template instantiation
 template void bubble_sort<uint32_t>(std::vector<uint32_t> &v);
+template void selection_sort<uint32_t>(std::vector<uint32_t> &v);
 
 } // namespace sorting
