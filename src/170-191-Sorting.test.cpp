@@ -18,3 +18,12 @@ TEST(sorting_test, bubble_sort_test)
 
     ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
 }
+
+TEST(sorting_test, selection_sort_test)
+{
+    std::vector<uint32_t> actual = data;
+
+    sorting::selection_sort(actual);
+
+    ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
+}
