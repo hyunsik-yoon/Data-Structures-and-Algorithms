@@ -144,6 +144,67 @@ template <typename T> const std::vector<T> merge_sort(const std::vector<T> &v)
 
 } // namespace sorting
 
+// For quick sort
+// This implementation follows figure at 1:05 in chapter 182, where pivot is initially set to the leftmost element.
+namespace
+{
+
+// Partition values in v of range (start: inclusive index, end: exclusive index)
+template <typename T> int32_t partition(std::vector<T> &v, int32_t start, int32_t end)
+{
+    assert(start < end);
+
+    int32_t pivot = end - 1;
+
+    for (int32_t k = start; k < pivot; )
+    {
+        if (v[k] > v[pivot])
+        {
+            // Note: this works when start - end == 2
+            // when v[k] == 7 and v[pivot] == 3
+            auto pivot_val = v[pivot];  // 7(k) 2 4 3(pivot)
+            v[pivot] = v[k];            // 7    2 4 7
+            v[k] = v[pivot - 1];        // 4    2 4 7
+            v[pivot - 1] = pivot_val;   // 4    2 3 7
+
+            pivot = pivot - 1;
+            // let's not increase k
+        }
+        else
+        {
+            k++;
+        }
+    }
+
+    return pivot;
+}
+
+// Perform quick sort for a vector (start: inclusive index, end: exclusive index)
+template <typename T> void quick_sort(std::vector<T> &v, int32_t start, int32_t end)
+{
+    if (end - start <= 1)
+    {
+        return;
+    }
+
+    auto pivot = partition(v, start, end);
+
+    quick_sort(v, start, pivot);
+    quick_sort(v, pivot + 1, end);
+}
+
+} // namespace
+
+namespace sorting
+{
+
+template <typename T> void quick_sort(std::vector<T> &v)
+{
+    ::quick_sort(v, 0, v.size());
+}
+
+} // namespace sorting
+
 // template instantiation
 namespace sorting
 {
@@ -152,5 +213,6 @@ template void bubble_sort<uint32_t>(std::vector<uint32_t> &v);
 template void selection_sort<uint32_t>(std::vector<uint32_t> &v);
 template void insertion_sort<uint32_t>(std::vector<uint32_t> &v);
 template const std::vector<uint32_t> merge_sort(const std::vector<uint32_t> &v);
+template void quick_sort<uint32_t>(std::vector<uint32_t> &v);
 
 } // namespace sorting
