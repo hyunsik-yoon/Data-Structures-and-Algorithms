@@ -1,5 +1,7 @@
 #include "170-191-Sorting.h"
 
+#include <cassert>
+#include <stdexcept>
 #include <stdint.h>
 
 namespace
@@ -74,9 +76,92 @@ template <typename T> void insertion_sort(std::vector<T> &v)
     }
 }
 
+} // namespace sorting
+
+
+// For merge Sort
+namespace
+{
+
+template <typename T> const std::vector<T> merge(const std::vector<T> &left, const std::vector<T> &right)
+{
+    uint32_t v_size = left.size() + right.size();
+    std::vector<T> vec(v_size);
+
+    uint32_t l = 0;  // for index of left vector
+    uint32_t r = 0;  // for index of right vector
+    uint32_t v = 0;  // for index of returned vector
+
+    while (true)
+    {
+        if (left[l] < right[r])
+        {
+            vec[v] = left[l];
+            l++;
+            v++;
+        }
+        else
+        {
+            vec[v] = right[r];
+            r++;
+            v++;
+        }
+
+        if (l == left.size())
+        {
+            // copy rest of right
+            for (auto i = r; i < right.size(); i++, v++)
+            {
+                vec[v] = right[i];
+            }
+            break;
+        }
+        if (r == right.size())
+        {
+            // copy rest of left
+            for (auto i = l; i < left.size(); i++, v++)
+            {
+                vec[v] = left[i];
+            }
+            break;
+        }
+    }
+    return vec;
+}
+
+} // namespace
+
+namespace sorting
+{
+
+template <typename T> const std::vector<T> merge_sort(const std::vector<T> &v)
+{
+    if (v.size() <= 1)
+    {
+        return v;
+    }
+
+    int32_t mid_idx = v.size() / 2;
+    //   Example
+    //       size()        mid_idx
+    //          4            2
+    //          5            2
+
+    const auto left_v = merge_sort(std::vector<T>{v.begin(), v.begin() + mid_idx});
+    const auto right_v = merge_sort(std::vector<T>{v.begin() + mid_idx, v.end()});
+
+    return merge(left_v, right_v);
+}
+
+} // namespace sorting
+
 // template instantiation
+namespace sorting
+{
+
 template void bubble_sort<uint32_t>(std::vector<uint32_t> &v);
 template void selection_sort<uint32_t>(std::vector<uint32_t> &v);
 template void insertion_sort<uint32_t>(std::vector<uint32_t> &v);
+template const std::vector<uint32_t> merge_sort(const std::vector<uint32_t> &v);
 
 } // namespace sorting
