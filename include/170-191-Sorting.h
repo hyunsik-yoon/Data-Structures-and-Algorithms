@@ -9,6 +9,7 @@ namespace sorting
 
 template <typename T> void bubble_sort(std::vector<T> &v);
 template <typename T> void selection_sort(std::vector<T> &v);
+template <typename T> void insertion_sort(std::vector<T> &v);
 
 } // namespace sorting
 

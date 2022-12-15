@@ -48,8 +48,35 @@ template <typename T> void selection_sort(std::vector<T> &v)
     }
 }
 
+template <typename T> void insertion_sort(std::vector<T> &v)
+{
+    // For index k in v where start <= k <= end, copy v[k] to v[k+1]
+    // value of v[start] is undefined.
+    auto shift_right = [&v](int32_t start, int32_t end)
+    {
+        for (int32_t i = end; i >= start; i--)
+        {
+            v[i + 1] = v[i];
+        }
+    };
+
+    for (size_t n = 0; n < v.size(); n++)
+    {
+        for (size_t k = 0; k < n; k++)
+        {
+            if (v[k] > v[n])
+            {
+                uint32_t tmp = v[n];
+                shift_right(k, n-1);
+                v[k] = tmp;
+            }
+        }
+    }
+}
+
 // template instantiation
 template void bubble_sort<uint32_t>(std::vector<uint32_t> &v);
 template void selection_sort<uint32_t>(std::vector<uint32_t> &v);
+template void insertion_sort<uint32_t>(std::vector<uint32_t> &v);
 
 } // namespace sorting
