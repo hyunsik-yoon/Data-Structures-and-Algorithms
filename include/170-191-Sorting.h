@@ -11,6 +11,8 @@ template <typename T> void bubble_sort(std::vector<T> &v);
 template <typename T> void selection_sort(std::vector<T> &v);
 template <typename T> void insertion_sort(std::vector<T> &v);
 template <typename T> const std::vector<T> merge_sort(const std::vector<T> &v);
+template <typename T> void quick_sort(std::vector<T> &v);
+
 
 } // namespace sorting
 

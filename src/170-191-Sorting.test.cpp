@@ -66,3 +66,17 @@ TEST(sorting_test, merge_sort_test)
         ASSERT_TRUE(std::equal(expected_02.begin(), expected_02.end(), actual.begin()));
     }
 }
+
+TEST(sorting_test, quick_sort_test)
+{
+    {
+        std::vector<uint32_t> actual = data_01;
+        sorting::quick_sort(actual);
+        ASSERT_TRUE(std::equal(expected_01.begin(), expected_01.end(), actual.begin()));
+    }
+    {
+        std::vector<uint32_t> actual = data_02;
+        sorting::quick_sort(actual);
+        ASSERT_TRUE(std::equal(expected_02.begin(), expected_02.end(), actual.begin()));
+    }
+}
