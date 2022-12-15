@@ -36,3 +36,10 @@ TEST(sorting_test, insertion_sort_test)
 
     ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
 }
+
+TEST(sorting_test, merge_sort_test)
+{
+    auto actual = sorting::merge_sort(data);
+
+    ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
+}
