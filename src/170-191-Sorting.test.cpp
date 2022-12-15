@@ -27,3 +27,12 @@ TEST(sorting_test, selection_sort_test)
 
     ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
 }
+
+TEST(sorting_test, insertion_sort_test)
+{
+    std::vector<uint32_t> actual = data;
+
+    sorting::insertion_sort(actual);
+
+    ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
+}
