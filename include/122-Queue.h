@@ -43,7 +43,7 @@ public:
     }
 
 private:
-    ds::LinkedList<int> _l;
+    ds::LinkedList<T> _l;
 };
 
 /**
