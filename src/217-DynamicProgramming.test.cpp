@@ -18,23 +18,41 @@ TEST(inefficient_fibonacci, normal_test)
     ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
 }
 
-TEST(dybamic_fibonacci, normal_test)
+TEST(dynamic_fibonacci, normal_test)
 {
-    using namespace n217;
-
     constexpr uint32_t MAX = 10;
     std::vector<uint32_t> expected;
-    std::vector<uint32_t> actual;
 
     for (uint32_t n = 0; n < MAX; n++)
     {
-        expected.emplace_back(inefficient_fibonacci(n));
+        expected.emplace_back(n217::inefficient_fibonacci(n));
     }
 
-    for (uint32_t n = 0; n < MAX; n++)
+    decltype(n217::recursive_dynamic_fibonacci) *dp;
+
+    // recursive fibonacci
     {
-        actual.emplace_back(dynamic_fibonacci(n));
+        dp = &n217::recursive_dynamic_fibonacci;
+
+        std::vector<uint32_t> actual;
+        for (uint32_t n = 0; n < MAX; n++)
+        {
+            actual.emplace_back(dp(n));
+        }
+
+        ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
     }
 
-    ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
+    // iterative fibonacci
+    {
+        dp = &n217::iterative_dynamic_fibonacci;
+
+        std::vector<uint32_t> actual;
+        for (uint32_t n = 0; n < MAX; n++)
+        {
+            actual.emplace_back(dp(n));
+        }
+
+        ASSERT_TRUE(std::equal(expected.begin(), expected.end(), actual.begin()));
+    }
 }
